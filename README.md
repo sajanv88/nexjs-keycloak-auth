@@ -3,6 +3,18 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Getting Started
 
 First, run the development server:
+Create a .env file and setup the following environment variable
+```bash 
+
+NEXT_AUTHORITY_URL=https://{your-endpoint}/realms/dev
+NEXT_PUBLIC_AUDIENCE=account
+NEXT_PUBLIC_CLIENT_ID=public-client
+NEXT_PUBLIC_ORIGIN=https://localhost:4200
+SESSION_PASSWORD=$2a$10$5OjhNV934FmH7s4eMFqx.uW8v7Ot/HOHMaC5hoz7TTcmHEN6hS0N.
+REDIS_URL=redis://localhost:6379
+
+```
+
 
 ```bash
 npm run dev
