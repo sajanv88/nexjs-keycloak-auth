@@ -11,6 +11,7 @@
   "dependencies": {
     "ioredis": "^5.5.0",
     "iron-session": "^8.0.4",
+    "jose": "^5.9.6",
     "next": "15.1.7",
     "openid-client": "^6.1.7",
     "react": "^19.0.0",

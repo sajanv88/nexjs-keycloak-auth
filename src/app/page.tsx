@@ -1,5 +1,6 @@
 import {getRedis, getUserInfo} from "@web/libs/openid";
 import Link from "next/link";
+import UserComponent from "@web/app/components/user-component";
 
 export default async function Home() {
     const userInfoResponse = await getUserInfo()
@@ -26,6 +27,7 @@ export default async function Home() {
             <div className="flex justify-center">
                 <Link href={`/account/logout?id_token_hint=${hints.id_token}`}>Logout</Link>
             </div>
+            <UserComponent />
         </main>
     );
 }

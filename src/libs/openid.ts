@@ -2,6 +2,7 @@ import {IronSession, SessionOptions, getIronSession} from 'iron-session'
 import {cookies} from 'next/headers'
 import * as client from 'openid-client'
 import Redis from "ioredis";
+import * as jose from "jose";
 
 export const clientConfig = {
     authority: process.env.NEXT_AUTHORITY_URL,
@@ -63,7 +64,7 @@ export async function getUserInfo() {
     try {
         const openIdClientConfig = await getClientConfig()
         const session = await getSession()
-        if(!session.access_token || !session.sub) throw new Error("Access token or sub is not set in session");
+        if(!session.access_token || !session.sub) return;
         return await client.fetchUserInfo(openIdClientConfig, session.access_token, session.sub);
     }catch (e) {
         console.error(e);
@@ -71,3 +72,15 @@ export async function getUserInfo() {
     }
 
 }
+
+export async function getJwtPayloadIfValid() {
+    const session = await getSession()
+    if(!session.access_token || !session.sub) return null;
+    const JWKS = jose.createRemoteJWKSet(new URL(`${process.env.NEXT_AUTHORITY_URL}/protocol/openid-connect/certs`));
+    const { payload } = await jose.jwtVerify(session.access_token, JWKS, {
+        issuer: process.env.NEXT_AUTHORITY_URL,
+        audience: process.env.NEXT_PUBLIC_AUDIENCE,
+    });
+    return payload;
+}
+
