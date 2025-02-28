@@ -21,7 +21,6 @@ export async function GET(request: NextRequest) {
     })
 
 
-    console.log({tokenSet}, "tokenSet ==== ")
     const {access_token, refresh_token, expires_in, id_token} = tokenSet
 
     session.access_token = access_token
@@ -32,7 +31,6 @@ export async function GET(request: NextRequest) {
 
     // call userinfo endpoint to get user info
     const userinfo = await client.fetchUserInfo(openIdClientConfig, access_token, sub)
-    console.log({userinfo}, "userinfo ==== ")
     session.sub = userinfo.sub;
     const redis = await getRedis();
     await redis.set(userinfo.sub, JSON.stringify({id_token, refresh_token}), 'EX', 86400);

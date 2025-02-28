@@ -1,0 +1,46 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: https://keycloak.local
+      KC_PROXY: edge
+    ports:
+      - "8080:8080"
+    networks:
+      - keycloak_network
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - keycloak_network
+
+  redis:
+    container_name: keycloak_redis
+    image: 'bitnami/redis:latest'
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_MASTER_HOST=locahost
+      - REDIS_PASSWORD=password
+    networks:
+      - keycloak_network
+
+networks:
+  keycloak_network:
+
+volumes:
+  caddy_data:
+  caddy_config:

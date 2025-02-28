@@ -1,0 +1,11 @@
+{
+
+  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  email test@gmail.com
+  local_certs
+}
+
+keycloak.local {
+  reverse_proxy keycloak:8080
+  tls internal
+}
